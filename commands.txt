@@ -1,0 +1,129 @@
+git status - проверить текущее состояние репозитория. Команда проверки состояния сообщит, что коммитить нечего. Это означает, что в репозитории хранится текущее состояние рабочего каталога, и нет никаких изменений, ожидающих записи.
+
+git add - проиндексировать изменения
+
+git commit - выполнить коммитить
+
+git log - получение списка произведенных изменений
+git log --pretty=oneline - Однострочный формат
+git log --pretty=oneline --max-count=2
+git log --pretty=oneline --since='5 minutes ago'
+git log --pretty=oneline --until='5 minutes ago'
+git log --pretty=oneline --author=<your name>
+git log --pretty=oneline --all
+
+Алиасы ( without --global - local )
+git config --global alias.co checkout
+git config --global alias.ci commit
+git config --global alias.st status
+git config --global alias.br branch
+git config --global alias.hist "log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short"
+git config --global alias.type 'cat-file -t'
+git config --global alias.dump 'cat-file -p
+
+Получение старых версий:
+git log -> скопировать hash -> переключиться get checkout <hash>
+
+Создание тегов версий:
+git tag <name> - создание тега
+
+Отмена локальных изменений (до индексации):
+git status -> переключиться на измененный файл -> git checkout hello.html // or any file name
+
+Отмена проиндексированных изменений (перед коммитом): 
+git reset HEAD hello.html - Команда reset сбрасывает буферную зону к HEAD. Это очищает буферную зону от изменений, которые мы только что проиндексировали. Команда reset (по умолчанию) не изменяет рабочий каталог. Поэтому рабочий каталог все еще содержит нежелательный комментарий. Мы можем использовать команду checkout, чтобы удалить нежелательные изменения в рабочем каталоге.
+
+Отмена коммитов:
+Сделать коммит с новыми изменениями, отменяющими предыдущие
+git revert HEAD --no-edit
+
+Удаление коммитов из ветки:
+reset
+git reset --hard v1 // v1 - tag в ветке. Можно использовать хэш-значение, если нет тега
+Параметр --hard указывает, что рабочий каталог должен быть обновлен в соответствии с новым head ветки
+
+Удаление тега:
+git tag -d oops // имя тега, после удаления тега, сборщик мусора подчистит reset нутые коммиты, которые можно было чекнуть с git hist --all 
+
+Внесение изменений в коммиты
+git commit --amend -m "Add an author/email comment"
+git commit --amend — это удобный способ изменить последний коммит. Она позволяет объединить проиндексированные изменения с предыдущим коммитом без создания нового коммита. Ее можно использовать для редактирования комментария к предыдущему коммиту без изменения состояния кода в нем.
+
+Перемещение файлов:
+git mv hello.html lib - git mv что куда
+2 способ
+mkdir lib
+mv hello.html lib
+git add lib/hello.html
+git rm hello.html
+
+Создание ветки:
+git checkout -b === git branch <имяветки> git checkout <имяветки>
+
+Навигация по веткам: 
+git checkout <имя ветки>
+
+Слияние: 
+git checkout style
+git merge master
+
+Разрешение конфликтов: 
+git checkout style
+git merge master
+// решить возникшие конфликты 
+git add
+git commit 
+
+Перебазирование как альтернатива слиянию:
+git checkout style
+git rebase master
+
+Слияние style в master:
+переключиться на ветку, в которую вы хотите включить изменения, и выполнить команду git merge
+git checkout master
+git merge style
+
+Создайте клон репозитория hello: 
+git clone hello cloned_hello
+
+Что такое origin?:
+git remote show origin
+
+Список удаленных веток:
+git branch -a
+
+Извлечение изменений:
+git fetch
+git fetch - будет извлекать новые коммиты из удаленного репозитория, но не будет сливать их с вашими наработками в локальных ветках
+
+Слияние извлеченных изменений:
+git fetch
+git merge origin/master // стать на склонированный репоз и выполнить команду 
+
+Извлечение и слияние изменений: 
+git pull === git fetch & git merge origin/master
+
+Добавить локальную ветку, которая отслеживает удаленную ветку:
+git branch --track style origin/style
+git branch -a
+
+Создайте чистый репозиторий: 
+git clone --bare hello hello.git
+
+Добавление удаленного репозитория: 
+cd hello
+git remote add shared ../hello.git
+
+Отправка изменений:
+git push 
+
+Извлечение общих изменений:
+git remote add shared ../hello.git
+git branch --track shared master
+git pull shared master
+cat README
+
+Добавить репозиторий удаленно и запушить:
+git remote add origin <link>
+git branch -M master
+git push -u origin master
